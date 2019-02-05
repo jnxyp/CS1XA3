@@ -1,0 +1,16 @@
+.round_image {
+    border-radius: 50%;
+}
+
+* {
+    animation: 5s rotating infinite
+}
+
+@keyframes rotating {
+    30% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
