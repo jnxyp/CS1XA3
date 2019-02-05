@@ -3,7 +3,8 @@
 }
 
 * {
-    animation: 5s rotating infinite
+    animation: 5s rotating infinite;
+    font-family: 'Caveat', cursive;
 }
 
 @keyframes rotating {
