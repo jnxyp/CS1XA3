@@ -1,16 +1,14 @@
-.round_image {
-    border-radius: 50%;
-}
+/*
+Author: jn_xyp (xiny13@mcmaster.ca)
 
-* {
-    animation: 5s rotating infinite;
-    font-family: 'Caveat', cursive;
+The common style sheet for sites on 1xa3 server
+*/
+
+img.size-auto {
+    max-width: 90%;
 }
 
 @keyframes rotating {
-    30% {
-        transform: rotate(0deg);
-    }
     100% {
         transform: rotate(360deg);
     }
