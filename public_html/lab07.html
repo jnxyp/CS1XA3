@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lab 7</title>
+</head>
+<body>
+<div>
+    <input type="text" id='user' placeholder="Name">
+    <input type="password" id="pw1" placeholder="Password" oninput="verify_pw()">
+    <input type="password" id="pw2" placeholder="Re-enter Password" oninput="verify_pw()">
+    <div>
+        <span id="put-response"></span>
+    </div>
+    <div id="pw-verified" style="color: green;">OK</div>
+    <button type="button" id="submit" onclick="submit()" onload="verify_pw()">Submit</button>
+    <script>
+        let $ = document.getElementById.bind(document);
+
+        function verify_pw() {
+            let pw_status = $('pw-verified');
+            let btn = $('submit');
+            if ($('pw1').value === $('pw2').value) {
+                pw_status.style.color = 'green';
+                pw_status.innerText = 'OK';
+                btn.disabled = '';
+            }
+            else {
+                pw_status.style.color = 'red';
+                pw_status.innerText = 'Passwords do not match!';
+                btn.disabled = 'disabled';
+            }
+        }
+
+        function submit() {
+            let username = $('user').value;
+            let password = $('pw1').value;
+            let messages = {'username': username, 'password': password};
+
+            post('https://mac1xa3.ca/e/xiny13/lab7/', messages, function (xhr) {
+                $('put-response').innerText = xhr.responseText;
+            })
+        }
+
+        function post(host, messages, callback) {
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", host, true);
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                console.log(xhr.readyState + ' ' + xhr.status);
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    callback(xhr);
+                }
+            };
+            let params = '';
+            for (param in messages) {
+                params += encodeURIComponent(param) + '=' + encodeURIComponent(messages[param]) + '&';
+            }
+            console.log(params);
+            xhr.send(params);
+        }
+    </script>
+</div>
+</body>
+</html>
