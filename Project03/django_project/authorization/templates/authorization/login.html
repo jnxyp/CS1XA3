@@ -1,0 +1,24 @@
+{% extends "authorization/header_and_footer.html" %}
+
+{% block content %}
+    <div class="p-3">
+        <h1 class="display-4">Login</h1>
+        <form action="{% url 'authorization:login' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            {#            TODO Add "check to save pw" function#}
+            {#            <div class="form-group form-check">#}
+            {#                <input type="checkbox" class="form-check-input" id="save-pw">#}
+            {#                <label class="form-check-label" for="save-pw">Save Password</label>#}
+            {#                <small id="usernameHelp" class="form-text text-muted">Check this only on your own#}
+            {#                    devices#}
+            {#                </small>#}
+            {#            </div>#}
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+
+
+{% endblock %}

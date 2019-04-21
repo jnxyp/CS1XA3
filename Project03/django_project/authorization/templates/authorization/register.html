@@ -1,0 +1,14 @@
+{% extends "authorization/header_and_footer.html" %}
+
+{% block content %}
+    <div class="p-3">
+        <h1 class="display-4">Create an account</h1>
+        <form action="{% url 'authorization:register' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="mt-2">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
