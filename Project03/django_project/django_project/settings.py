@@ -32,7 +32,6 @@ LOGIN_REDIRECT_URL = '/auth/'
 
 INSTALLED_APPS = [
     'authorization.apps.AuthConfig',
-    'polls.apps.PollsConfig',
     'forum.apps.ForumConfig',
     'django.contrib.admin',
     'django.contrib.auth',
