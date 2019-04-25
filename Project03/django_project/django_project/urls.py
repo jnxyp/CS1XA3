@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from . import views
 
-url_prefix = 'e/'
+url_prefix = 'e/xiny13/'
 
 urlpatterns = [
     path(url_prefix + 'forum/', include('forum.urls')),
