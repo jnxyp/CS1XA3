@@ -19,7 +19,6 @@ from . import views
 
 urlpatterns = [
     path('forum/', include('forum.urls')),
-    path('polls/', include('polls.urls')),
     path('auth/', include('authorization.urls')),
     path('admin/', admin.site.urls),
     path('',  views.index, name='index')
