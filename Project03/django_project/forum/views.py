@@ -1,14 +1,28 @@
 from django.shortcuts import render
 
+from .apps import ForumConfig
+
 # Create your views here.
 
 from django.http import HttpResponse
+from django.views.generic import TemplateView, ListView
 
 
 # Index
-def index(request):
-    return HttpResponse('Index of Forum')
 
+
+# def index(request):
+#     return render(request, 'forum/header_and_footer.html')
+
+
+class IndexPageView(TemplateView):
+    template_name = 'forum/index.html'
+    extra_context = {'auth_config': ForumConfig.__dict__,
+                     'title': 'Index Page - %s' % ForumConfig.verbose_name}
+
+
+class TagList(ListView):
+    pass
 
 # Tag
 def tag(request, tag_id: int):

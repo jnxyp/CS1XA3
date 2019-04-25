@@ -5,16 +5,26 @@
         <div class="p-3">
             {% if u.is_authenticated %}
                 <div class="jumbotron mb-0">
-                    <h1 class="display-4">{{ request.user.username }}</h1>
-                    <p class="lead">This is a simple hero unit, a simple jumbotron-style component
-                        for
-                        calling
-                        extra attention to featured content or information.</p>
-                    <hr class="my-4">
-                    <p>It uses utility classes for typography and spacing to space content out
-                        within
-                        the larger
-                        container.</p>
+                    <div class="m-1">
+                        <h1 class="display-1 d-inline">{{ object.username }}</h1>
+                        <h2 class="display-4 d-inline">#{{ object.id }}</h2>
+                    </div>
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td>Registered Email:</td>
+                            <td>{{ object.email|default:"Not avaliable" }}</td>
+                        </tr>
+                        <tr>
+                            <td>Last Login:</td>
+                            <td>{{ object.last_login|date|default:"Not avaliable" }}</td>
+                        </tr>
+                        <tr>
+                            <td>Date Joined:</td>
+                            <td>{{ object.date_joined|date|default:"Not avaliable" }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                     <a class="btn btn-primary btn-lg" href="{% url 'authorization:logout' %}"
                        role="button">Logout</a>
                 </div>

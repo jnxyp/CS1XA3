@@ -1,10 +1,11 @@
 from django.contrib import auth
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect, resolve_url
 from django.utils.http import is_safe_url
-from django.views.generic import FormView
+from django.views.generic import FormView, DetailView
 
 from .apps import AuthConfig
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -51,8 +52,16 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 #         auth.logout(request)
 #         return redirect('authorization:index')
 
+# def index(request):
+#     return render(request, 'authorization/index.html',
+#                       context={'auth_config': AuthConfig.__dict__,
+#                                'title': 'Account Info - %s' % AuthConfig.verbose_name})
+
 class ModifiedLoginView(LoginView):
     class BootstrapAuthenticationForm(AuthenticationForm):
+        required_css_class = 'font-weight-bold'
+        error_css_class = 'text-danger'
+
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             for field_name in self.fields:
@@ -69,6 +78,9 @@ class ModifiedLoginView(LoginView):
 
 class RegisterView(FormView):
     class BootstrapUserCreationForm(UserCreationForm):
+        required_css_class = 'font-weight-bold'
+        error_css_class = 'text-danger'
+
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
             for field_name in self.fields:
@@ -101,7 +113,8 @@ class RegisterView(FormView):
         return self.get_redirect_url()
 
     def form_valid(self, form):
-        new_user = form.save()
+        # if the form is valid, save that user to DB
+        form.save()
         # if the session is currently logged in, log it out after new account created
         if self.request.user.is_authenticated:
             logout(self.request)
@@ -114,7 +127,12 @@ class ModifiedLogoutView(LogoutView):
                      'title': 'Logged Out - %s' % AuthConfig.verbose_name}
 
 
-def index(request):
-    return render(request, 'authorization/index.html',
-                  context={'auth_config': AuthConfig.__dict__, 'request': request,
-                           'title': 'Account Info - %s' % AuthConfig.verbose_name})
+class UserDetailView(DetailView):
+    model = User
+    template_name = 'authorization/index.html'
+    extra_context = {'auth_config': AuthConfig.__dict__,
+                     'title': 'Account Info - %s' % AuthConfig.verbose_name}
+
+    # Override the default get_object function, since we just need to display the current User
+    def get_object(self, queryset=None):
+        return self.request.user

@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -5,9 +6,9 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class ForumUser(models.Model):
-    user = models.OneToOneField(to=User, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, null=True,
+                                related_name='forum_user', related_query_name='forum_user')
     nick_name = models.CharField(max_length=30)
-
 
 
 class Post(models.Model):
@@ -17,9 +18,15 @@ class Post(models.Model):
     pub_date = models.DateTimeField('Date Published')
     parent_thread = models.ForeignKey(to='Thread', on_delete=models.CASCADE, related_name='posts',
                                       related_query_name='post')
-    # TODO Limit the choice of reply target to the posts under the same thread
     reply_target = models.ForeignKey(to='self', on_delete=models.SET_NULL, null=True, blank=True,
                                      related_name='replies', related_query_name='reply')
+
+    def clean(self):
+        super().clean()
+        if self.reply_target:
+            if self.parent_thread != self.reply_target.parent_thread:
+                raise ValidationError(
+                    'Reply target has different parent thread with current Post object')
 
 
 class Thread(models.Model):

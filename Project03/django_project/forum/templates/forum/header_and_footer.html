@@ -1,9 +1,9 @@
 {% extends "authorization/base.html" %}
 {% block body %}
     <header>
-        <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-light bg-light sticky-top navbar-expand-lg">
             <a class="navbar-brand"
-               href="{% url 'authorization:index' %}">{{ auth_config.verbose_name }}</a>
+               href="{% url 'forum:index' %}">{{ auth_config.verbose_name }}</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse"
                     data-target="#auth-navbar-nav">
                 <span class="navbar-toggler-icon"></span>
