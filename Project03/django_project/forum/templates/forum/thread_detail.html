@@ -19,7 +19,7 @@
                             <span>{{ thread.pub_date|date }}</span>
                         </div>
                         <div class="forum-card p-3 mb-2 bg-light" style="flex-grow: 5">
-                            <div><p>{{ post.contents|linebreaks }}</p></div>
+                            <div class="markdown-container">{{ post.contents }}</div>
                             <div>
                             <span class="float-right"><a
                                     href="{% url 'forum:create_reply' %}?thread-id={{ thread.id }}&reply-target-id={{ post.id }}"

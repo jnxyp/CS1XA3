@@ -119,6 +119,7 @@ def create_thread(request):
                                'title': 'Start new Thread - %s' % ForumConfig.verbose_name})
 
 
+@login_required
 def create_reply(request):
     if request.method == 'POST':
         thread_id = int(request.POST['thread-id'])
