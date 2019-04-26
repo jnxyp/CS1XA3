@@ -28,7 +28,8 @@
                 <hr class="m-1">
                 <div class="text-secondary">{{ category.description }}</div>
                 <div>Total Posts: <b>{{ category.posts.all|length }}</b></div>
-            </div><div id="user-info" class="forum-card p-3 mb-2 bg-light">
+            </div>
+            <div id="user-info" class="forum-card p-3 mb-2 bg-light">
                 {% if user.is_authenticated %}
                     {% if user.forum_user %}
                         <a href="{% url 'forum:user_info' user.id %}"
@@ -49,7 +50,7 @@
                     {% else %}
                         <div class="secondary-title">Please activate your forum account</div>
                         <hr class="m-1">
-                        <a class="btn btn-success btn-lg"
+                        <a class="btn btn-danger btn-lg btn-block"
                            href="{% url 'forum:activate' %}?next={{ request.path }}"
                            role="button">Activate</a>
                     {% endif %}

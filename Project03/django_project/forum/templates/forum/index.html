@@ -42,7 +42,7 @@
                     {% else %}
                         <div class="secondary-title">Please activate your forum account</div>
                         <hr class="m-1">
-                        <a class="btn btn-success btn-lg"
+                        <a class="btn btn-danger btn-lg btn-block"
                            href="{% url 'forum:activate' %}?next={{ request.path }}"
                            role="button">Activate</a>
                     {% endif %}
