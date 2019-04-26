@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from django.urls import resolve
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
@@ -26,7 +28,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-LOGIN_REDIRECT_URL = '/auth/'
+URL_PREFIX = 'e/xiny13/'
+
+LOGIN_REDIRECT_URL = '/' + URL_PREFIX + 'forum'
+
+LOGIN_URL = '/' + URL_PREFIX + 'auth/login'
 
 # Application definition
 

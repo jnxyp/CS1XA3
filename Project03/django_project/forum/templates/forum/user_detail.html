@@ -1,0 +1,61 @@
+{% extends "forum/header_and_footer.html" %}
+
+{% block content %}
+    <div class="forum-bg" style="display: flex; flex-direction: row; flex-wrap: wrap-reverse">
+        <div id="left" class="p-3" style="flex-grow: 5">
+            <div class="forum-card p-3 mb-2 bg-light">
+                <h2>Threads</h2>
+                {% for thread in threads %}
+                    <div class="p-3 mb-2 bg-light">
+                        <div>
+                            <a href="{% url 'forum:thread' thread.id %}"
+                               class="h4 text-dark">{{ thread.title }}
+                                - {{ thread.author.user.username }}</a>
+                        </div>
+                        <div>{{ thread.posts.first.contents }}</div>
+                        <hr class="m-1">
+                        <span>Replies: <b>{{ thread.posts.all|length }}</b></span>
+                        <span>Date Posted: <b>{{ thread.pub_date|date }}</b></span>
+                    </div>
+                {% empty %}
+                    <p class="h3">No threads yet.</p>
+                {% endfor %}
+            </div>
+            <div class="forum-card p-3 mb-2 bg-light">
+                <h2>Posts</h2>
+                {% for post in posts %}
+                    {% with thread=post.parent_thread %}
+                        <div class="p-3 mb-2 bg-light">
+                            <div>
+                                <a href="{% url 'forum:thread' thread.id %}"
+                                   class="h5 text-dark">Re: {{ thread.title }}</a>
+                            </div>
+                            <div class="h5"><b>{{ post.contents }}</b></div>
+                            <hr class="m-1">
+                            <span>Date Posted: <b>{{ thread.pub_date|date }}</b></span>
+                        </div>
+                    {% endwith %}
+                {% empty %}
+                    <p class="h3">No posts yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div id="right" class="p-3" style="flex-grow: 1">
+            <div id="user-info" class="forum-card p-3 mb-2 bg-light">
+                <h2>User Info</h2>
+                <div class="h4">{{ current_user.forum_user.nick_name }}</div>
+                <hr class="m-1">
+                <div style="display: flex; flex-direction: row; justify-content:space-around">
+                    <div class="badge badge-secondary" style="flex-basis: 70px">
+                        <span class="d-block text-center">Threads:</span>
+                        <span class="d-block text-center">{{ current_user.forum_user.threads.all|length }}</span>
+                    </div>
+                    <div class="badge badge-secondary" style="flex-basis: 70px">
+                        <span class="d-block text-center">Posts:</span>
+                        <span class="d-block text-center">{{ current_user.forum_user.posts.all|length }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

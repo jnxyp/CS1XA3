@@ -1,0 +1,9 @@
+.forum-card {
+    box-shadow: 0 1px 3px rgba(26,26,26,.1);
+    overflow: hidden;
+    border-radius: 2px;
+}
+
+.forum-bg {
+    background: #dddddd;
+}
