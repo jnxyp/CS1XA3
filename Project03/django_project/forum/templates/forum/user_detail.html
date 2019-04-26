@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="forum-bg" style="display: flex; flex-direction: row; flex-wrap: wrap-reverse">
-        <div id="left" class="p-3" style="flex-grow: 5">
+        <div id="left" class="p-3" style="flex-grow: 5; max-width: 80%">
             <div class="forum-card p-3 mb-2 bg-light">
                 <h2>Threads</h2>
                 {% for thread in threads %}
@@ -12,7 +12,7 @@
                                class="h4 text-dark">{{ thread.title }}
                                 - {{ thread.author.user.username }}</a>
                         </div>
-                        <div>{{ thread.posts.first.contents|linebreaks }}</div>
+                        <div>{{ thread.posts.first.contents|linebreaks|slice:50 }}</div>
                         <hr class="m-1">
                         <span class="badge badge-success">{{ thread.category.name }}</span>
                         <span>Replies: <b>{{ thread.posts.all|length }}</b></span>
@@ -31,7 +31,7 @@
                                 <a href="{% url 'forum:thread' thread.id %}"
                                    class="h5 text-dark">Re: {{ thread.title }}</a>
                             </div>
-                            <div class="h5"><b>{{ post.contents|linebreaks }}</b></div>
+                            <div class="h5"><b>{{ post.contents|linebreaks|slice:100 }}</b></div>
                             <hr class="m-1">
                             <span>Date Posted: <b>{{ thread.pub_date|date }}</b></span>
                         </div>

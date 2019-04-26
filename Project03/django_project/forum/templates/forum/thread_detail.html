@@ -2,15 +2,15 @@
 
 {% block content %}
     <div class="forum-bg" style="display: flex; flex-direction: row; flex-wrap: wrap-reverse">
-        <div id="left" class="p-3" style="flex-grow: 5">
+        <div id="left" class="p-3" style="flex-grow: 5; max-width: 80%">
             <div class="forum-card p-3 mb-2 bg-light h3">
                 {{ thread.title }}
             </div>
             <div>
                 {% for post in object_list %}
-                    <div style="display: flex;">
+                    <div style="display: flex" id="post-{{ post.id }}">
                         <div class="forum-card p-3 mb-2 mr-2 bg-light"
-                             style="flex-basis: 150px; min-height: 80px">
+                             style="flex-basis: 150px; min-height: 80px; flex-shrink: 0">
                             <div>
                                 <a class="h5"
                                    href="{% url 'forum:user_info' post.author.user.id %}">{{ post.author.nick_name }}</a>
@@ -20,12 +20,27 @@
                         </div>
                         <div class="forum-card p-3 mb-2 bg-light" style="flex-grow: 5">
                             <div class="markdown-container">{{ post.contents }}</div>
-                            <div>
-                            <span class="float-right"><a
-                                    href="{% url 'forum:create_reply' %}?thread-id={{ thread.id }}&reply-target-id={{ post.id }}"
-                                    class="btn btn-secondary btn-sm">Reply
-                            </a></span>
-                            </div>
+                            {% if forloop.counter > 1 %}
+                                <hr class="m-1">
+                                <div class="d-flex"
+                                     style="flex-direction: row; justify-content: space-between">
+                                    <div style="flex-grow: 1">
+                                        {% for reply in post.replies.all %}
+                                            <a href="#post-{{ reply.id }}" class="alert alert-secondary d-block p-0 m-0 mt-1 d-block"
+                                                 style="width:80%">
+                                                <span class="badge badge-light mr-2">{{ reply.author.nick_name }}</span><span
+                                                    class="text-secondary small">{{ reply.contents|slice:100 }}</span>
+                                            </a>
+                                        {% empty %}
+                                            <span class="text-secondary small">No reply</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="d-flex" style="flex-direction: column-reverse">
+                                        <a href="{% url 'forum:create_reply' %}?thread-id={{ thread.id }}&reply-target-id={{ post.id }}"
+                                           class="btn btn-secondary btn-sm">Reply</a>
+                                    </div>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 {% empty %}
