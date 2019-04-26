@@ -14,6 +14,7 @@
                         </div>
                         <div>{{ thread.posts.first.contents }}</div>
                         <hr class="m-1">
+                        <span class="badge badge-success">{{ thread.category.name }}</span>
                         <span>Replies: <b>{{ thread.posts.all|length }}</b></span>
                         <span>Date Posted: <b>{{ thread.pub_date|date }}</b></span>
                     </div>
@@ -42,19 +43,40 @@
         </div>
         <div id="right" class="p-3" style="flex-grow: 1">
             <div id="user-info" class="forum-card p-3 mb-2 bg-light">
-                <h2>User Info</h2>
-                <div class="h4">{{ current_user.forum_user.nick_name }}</div>
-                <hr class="m-1">
-                <div style="display: flex; flex-direction: row; justify-content:space-around">
-                    <div class="badge badge-secondary" style="flex-basis: 70px">
-                        <span class="d-block text-center">Threads:</span>
-                        <span class="d-block text-center">{{ current_user.forum_user.threads.all|length }}</span>
-                    </div>
-                    <div class="badge badge-secondary" style="flex-basis: 70px">
-                        <span class="d-block text-center">Posts:</span>
-                        <span class="d-block text-center">{{ current_user.forum_user.posts.all|length }}</span>
-                    </div>
-                </div>
+                {% if user.is_authenticated %}
+                    {% if user.forum_user %}
+                        <a href="{% url 'forum:user_info' user.id %}"
+                           class="d-block"><span
+                                class="h2 ">{{ user.forum_user.nick_name }}</span><span
+                                class="float-right text-secondary">#{{ user.id }}</span></a>
+                        <hr class="m-1">
+                        <div style="display: flex; flex-direction: row" class="h5">
+                            <div class="badge badge-success mr-2" style="flex-basis: 70px">
+                                <span>Threads:</span>
+                                <span>{{ user.forum_user.threads.all|length }}</span>
+                            </div>
+                            <div class="badge badge-success mr-2" style="flex-basis: 70px">
+                                <span>Posts:</span>
+                                <span>{{ user.forum_user.posts.all|length }}</span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="secondary-title">Please activate your forum account</div>
+                        <hr class="m-1">
+                        <a class="btn btn-success btn-lg"
+                           href="{% url 'forum:activate' %}?next={{ request.path }}"
+                           role="button">Activate</a>
+                    {% endif %}
+                {% else %}
+                    <div class="secondary-title">Please register or login</div>
+                    <hr class="m-1">
+                    <a class="btn btn-primary btn-lg"
+                       href="{% url 'authorization:login' %}?next={{ request.path }}"
+                       role="button">Login</a>
+                    <a class="btn btn-success btn-lg"
+                       href="{% url 'authorization:register' %}?next={{ request.path }}"
+                       role="button">Register</a>
+                {% endif %}
             </div>
         </div>
     </div>

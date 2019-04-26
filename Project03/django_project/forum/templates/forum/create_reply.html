@@ -1,0 +1,39 @@
+{% extends "forum/header_and_footer.html" %}
+
+{% block content %}
+    <div class="forum-card p-3 mb-2 bg-light">
+        <h2>Write a Reply</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div style="display: none">
+                <input type="text" value="{{ thread.id }}" required
+                       name="thread-id">
+            </div>
+            {% if reply_target_id %}
+                <div style="display: none">
+                    <input type="text" value="{{ reply_target_id }}" required
+                           name="reply-target-id">
+                </div>
+            {% else %}
+                <div class="form-group" style="display: none">
+                    <label for="reply-target-id">Reply to</label>
+                    <select required name="reply-target-id" class="form-control"
+                            id="reply-target-id">
+                        {% for post in thread.posts.all %}
+                            <option value="{{ post.id }}">
+                                #{{ forloop.counter }}: {{ post.content|slice:30 }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+            <div class="form-group">
+                <label for="thread-contents">Contents</label>
+                <textarea class="form-control" id="thread-contents" rows="10" required
+                          name="thread-contents"></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" role="button" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}

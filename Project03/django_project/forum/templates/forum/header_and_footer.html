@@ -1,4 +1,5 @@
 {% extends "forum/base.html" %}
+{% block title %}{{ title }}{% endblock %}
 {% block body %}
     <header>
         <nav class="navbar navbar-light bg-light sticky-top navbar-expand-lg">
@@ -24,7 +25,8 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'authorization:login' %}?next={{ request.get_full_path }}">Login</a>
+                            <a class="nav-link"
+                               href="{% url 'authorization:login' %}?next={{ request.get_full_path }}">Login</a>
                         </li>
                     {% endif %}
                     {% if request.user.is_authenticated %}

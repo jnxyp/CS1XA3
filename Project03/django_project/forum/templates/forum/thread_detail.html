@@ -3,24 +3,35 @@
 {% block content %}
     <div class="forum-bg" style="display: flex; flex-direction: row; flex-wrap: wrap-reverse">
         <div id="left" class="p-3" style="flex-grow: 5">
-            {% for post in object_list %}
-                <div style="display: flex;">
-                    <div class="forum-card p-3 mb-2 mr-2 bg-light"
-                         style="flex-basis: 150px; min-height: 80px">
-                        <div>
-                            <a class="h5"
-                               href="{% url 'forum:user_info' post.author.user.id %}">{{ post.author.nick_name }}</a>
+            <div class="forum-card p-3 mb-2 bg-light h3">
+                {{ thread.title }}
+            </div>
+            <div>
+                {% for post in object_list %}
+                    <div style="display: flex;">
+                        <div class="forum-card p-3 mb-2 mr-2 bg-light"
+                             style="flex-basis: 150px; min-height: 80px">
+                            <div>
+                                <a class="h5"
+                                   href="{% url 'forum:user_info' post.author.user.id %}">{{ post.author.nick_name }}</a>
+                            </div>
+                            <hr class="m-1">
+                            <span>{{ thread.pub_date|date }}</span>
                         </div>
-                        <hr class="m-1">
-                        <span>{{ thread.pub_date|date }}</span>
+                        <div class="forum-card p-3 mb-2 bg-light" style="flex-grow: 5">
+                            <div><p>{{ post.contents|linebreaks }}</p></div>
+                            <div>
+                            <span class="float-right"><a
+                                    href="{% url 'forum:create_reply' %}?thread-id={{ thread.id }}&reply-target-id={{ post.id }}"
+                                    class="btn btn-secondary btn-sm">Reply
+                            </a></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="forum-card p-3 mb-2 bg-light" style="flex-grow: 5">
-                        <p>{{ post.contents }}</p>
-                    </div>
-                </div>
-            {% empty %}
-                <p class="h3">No threads yet.</p>
-            {% endfor %}
+                {% empty %}
+                    <p class="h3">No posts yet.</p>
+                {% endfor %}
+            </div>
         </div>
         <div id="right" class="p-3" style="flex-grow: 1">
             <div id="user-info" class="forum-card p-3 mb-2 bg-light">
@@ -58,7 +69,11 @@
             </div>
             <div id="create-post" class="forum-card p-3 mb-2 bg-light">
                 <a href="{% url 'forum:create_thread' %}?category_id={{ thread.category.id }}"
-                   class="btn btn-primary btn-lg btn-block">Start a Thread
+                   class="btn btn-primary btn-lg btn-block">Start new Thread
+                </a>
+                <a
+                        href="{% url 'forum:create_reply' %}?thread-id={{ thread.id }}&reply-target-id={{ thread.posts.first.id }}"
+                        class="btn btn-secondary btn-lg btn-block">Reply this Thread
                 </a>
             </div>
         </div>

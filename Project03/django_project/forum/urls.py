@@ -16,5 +16,6 @@ urlpatterns = [
     path('user/<int:user_id>', views.user, name='user_info'),
     path('activate/', views.register_user, name='activate'),
 
-    path('create/', views.create_thread, name='create_thread')
+    path('create/', views.create_thread, name='create_thread'),
+    path('reply/', views.create_reply, name='create_reply')
 ]

@@ -26,6 +26,9 @@ class IndexPageView(ListView):
     model = Thread
     paginate_by = 100
 
+    def get_queryset(self):
+        return Thread.objects.all()[::-1]
+
 
 class CategoryList(ListView):
     template_name = 'forum/category_listing.html'
@@ -96,14 +99,13 @@ def create_thread(request):
 
         thread_obj = Thread(author=request.user.forum_user, title=title, pub_date=datetime.now(),
                             category=Category.objects.get(pk=category_id))
-
         thread_obj.save()
 
         post = Post(author=request.user.forum_user, contents=contents, pub_date=datetime.now(),
                     parent_thread=thread_obj)
-
         post.save()
-        return thread(request, thread_id=thread_obj.id)
+
+        return redirect('forum:thread', thread_id=thread_obj.id)
     else:
         try:
             category_id = int(request.GET.get('category_id'))
@@ -115,3 +117,33 @@ def create_thread(request):
                                'category_id': category_id,
                                'auth_config': ForumConfig.__dict__,
                                'title': 'Start new Thread - %s' % ForumConfig.verbose_name})
+
+
+def create_reply(request):
+    if request.method == 'POST':
+        thread_id = int(request.POST['thread-id'])
+        reply_target_id = int(request.POST['reply-target-id'])
+        contents = request.POST['thread-contents']
+
+        print(contents)
+
+        post = Post(author=request.user.forum_user, contents=contents, pub_date=datetime.now(),
+                    parent_thread_id=thread_id, reply_target_id=reply_target_id)
+        post.save()
+
+        return redirect('forum:thread', thread_id=thread_id)
+    else:
+        try:
+            thread_id = int(request.GET.get('thread-id'))
+            thread_obj = Thread.objects.get(pk=thread_id)
+        except Exception:
+            return redirect('forum:index')
+        try:
+            reply_target_id = int(request.GET.get('reply-target-id'))
+        except Exception:
+            reply_target_id = None
+        return render(request, 'forum/create_reply.html',
+                      context={'thread': thread_obj, 'reply_target_id': reply_target_id,
+                               'auth_config': ForumConfig.__dict__,
+                               'title': 'Reply to post #%d - %s' % (
+                                   reply_target_id, ForumConfig.verbose_name)})
