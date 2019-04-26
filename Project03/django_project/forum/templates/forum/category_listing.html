@@ -1,0 +1,23 @@
+{% extends "forum/header_and_footer.html" %}
+
+{% block content %}
+    <div class="forum-bg" style="display: flex; flex-direction: row">
+        <div class="p-3"
+             style="display: flex; flex-direction: row; flex-basis: 100%; flex-wrap: wrap">
+            {% for category in object_list %}
+                <div class="forum-card p-3 mb-2 mr-2 bg-light"
+                     style="flex-basis: 400px; display: flex; flex-direction: column; justify-content:space-between ">
+                    <div style="">
+                        <a href="{% url 'forum:category_detail' category.id %}"
+                           class="h4 text-dark">{{ category.name }}</a>
+                    </div>
+                    <hr class="m-1">
+                    <div class="text-secondary">{{ category.description }}</div>
+                    <div>Total Posts: <b>{{ category.posts.all|length }}</b></div>
+                </div>
+            {% empty %}
+                <li>No tags yet.</li>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
